@@ -1,5 +1,6 @@
 from dependency_injector.wiring import Provide
 from datetime import date
+from datetime import time
 
 from cinema_management.core.domains.movie import MovieIn
 from cinema_management.core.domains.screening_room import Screening_roomIn
@@ -72,3 +73,23 @@ async def main(
         rows_count= 11,
         seats_in_row= 20
     ))
+
+    await screening_room_service.add_screening_room(Screening_roomIn(
+        number= 2,
+        rows_count= 3,
+        seats_in_row= 3
+    ))
+
+    await screening_room_service.add_screening_room(Screening_roomIn(
+        number= 3,
+        rows_count= 10,
+        seats_in_row= 13
+    ))
+
+    await screening_room_service.add_screening_room(Screening_roomIn(
+        number= 4,
+        rows_count= 13,
+        seats_in_row= 22
+    ))
+
+ 
