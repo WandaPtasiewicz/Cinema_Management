@@ -11,6 +11,8 @@ from cinema_management.core.services.i_repertoire_service import IRepertoireServ
 from cinema_management.core.services.i_screening_room_service import IScreening_roomService
 from cinema_management.core.services.i_movie_service import IMovieService
 from cinema_management.container import Container
+from cinema_management.db import screening_rooms_table
+
 
 async def main(
         movie_service: IMovieService = Provide[Container.movie_service],
@@ -19,77 +21,72 @@ async def main(
         screening_room_service: IScreening_roomService = Provide[Container.screening_room_service]
 
 ):
-    await movie_service.add_movie(MovieIn(
+    movies=[]
+    screening_rooms =[]
+    repertoires =[]
+
+    movies.append(await movie_service.add_movie(MovieIn(
         name="shrek",
         length=2.7,
-        premiere=date(2022, 12, 25),
+        premiere=date(2024, 12, 25),
         director="Maciej Kornatow"
-    ))
+    )))
 
-    await movie_service.add_movie(MovieIn(
-        name="Sonic 3",
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="sonic",
         length=2.2,
-        premiere=date(2022, 12, 18),
-        director="Kranowski Michal"
-    ))
+        premiere=date(2024, 12, 12),
+        director="Maciej Kornatow"
+    )))
 
-    await movie_service.add_movie(MovieIn(
-        name="Kaczki",
-        length=1.7,
-        premiere=date(2022, 11, 25),
-        director="Ania Kot"
-    ))
-
-    await movie_service.add_movie(MovieIn(
-        name="Minionki",
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="glawiator 2",
         length=2.7,
-        premiere=date(2022, 10, 11),
-        director="Kamil Slimak"
-    ))
+        premiere=date(2024, 11, 25),
+        director="Maciej Kornatow"
+    )))
 
-    await movie_service.add_movie(MovieIn(
-        name="Panda",
-        length=1.5,
-        premiere=date(2022, 5, 25),
-        director="Kamil Kowal"
-    ))
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="wicked",
+        length=3.1,
+        premiere=date(2024, 12, 1),
+        director="Maciej Kornatow"
+    )))
 
-    await movie_service.add_movie(MovieIn(
-        name="Żelazny facet",
-        length=2.7,
-        premiere=date(2025, 2, 2),
-        director="Kamil Kowal"
-    ))
 
-    await movie_service.add_movie(MovieIn(
-        name="lubisie",
-        length=1.2,
-        premiere=date(2025, 2, 9),
-        director="Kamil Kowal"
-    ))
 
-    await screening_room_service.add_screening_room(Screening_roomIn(
+    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
         number= 1,
-        rows_count= 11,
-        seats_in_row= 20
-    ))
-
-    await screening_room_service.add_screening_room(Screening_roomIn(
-        number= 2,
-        rows_count= 3,
-        seats_in_row= 3
-    ))
-
-    await screening_room_service.add_screening_room(Screening_roomIn(
-        number= 3,
-        rows_count= 10,
-        seats_in_row= 13
-    ))
-
-    await screening_room_service.add_screening_room(Screening_roomIn(
-        number= 4,
         rows_count= 13,
         seats_in_row= 22
-    ))
+    )))
+
+    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
+        number= 2,
+        rows_count= 2,
+        seats_in_row= 2
+    )))
+
+    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
+        number= 3,
+        rows_count= 14,
+        seats_in_row= 36
+    )))
+
+
+    repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
+        movie_id= movies[1].id,
+        screening_room_id = screening_rooms[1].id,
+        start_time= time(12,10),
+        date =date(2025,1,8)
+    )))
+
+    repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
+        movie_id= movies[1].id,
+        screening_room_id = screening_rooms[1].id,
+        start_time= time(14,30),
+        date =date(2025,1,8)
+    )))
+
 
  

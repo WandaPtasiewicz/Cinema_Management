@@ -24,7 +24,7 @@ class RepertoireRepository(IRepertoireRepository):
 
         query = (
             select(repertoires_table)
-            .order_by(repertoires_table.c.name.asc())
+            
         )
         repertoires = await database.fetch_all(query)
 
