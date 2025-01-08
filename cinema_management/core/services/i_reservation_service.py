@@ -1,7 +1,7 @@
 """Module containing reservation service abstractions."""
 
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, List
 
 from cinema_management.core.domains.reservation import Reservation, ReservationIn
 
@@ -30,8 +30,28 @@ class IReservationService(ABC):
         """
 
     @abstractmethod
-    async def get_by_repertoire_id(self, repertoire_id: int) -> Reservation | None:
-        ""
+    async def get_by_repertoire_id(self, repertoire_id: int) -> List[Reservation] | None:
+        """The method getting reservation by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            Reservation | None: The reservation details.
+        """
+
+    @abstractmethod
+    async def count_all_reservation_repertoire_id(self, repertoire_id: int) -> int:
+        """The method getting number of reservations by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            number of reservations.
+        """
+
+   
 
     @abstractmethod
     async def add_reservation(self, data: ReservationIn) -> Reservation | None:

@@ -29,6 +29,27 @@ class IRepertoireService(ABC):
             Repertoire | None: The repertoire details.
         """
 
+    @abstractmethod
+    async def number_of_taken_seats(self, repertoire_id: int) -> int:
+        """The method getting number of taken seats by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            number of taken seats.
+        """
+
+    @abstractmethod
+    async def available_seats(self, repertoire_id: int) -> int:
+        """The method getting number of free seats by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            number of free seats.
+        """
 
     @abstractmethod
     async def add_repertoire(self, data: RepertoireIn) -> Repertoire | None:

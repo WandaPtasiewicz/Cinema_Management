@@ -43,9 +43,17 @@ async def main(
     movies.append(await movie_service.add_movie(MovieIn(
         name="glawiator 2",
         length=2.7,
-        premiere=date(2024, 11, 25),
+        premiere=date(2025, 11, 25),
         director="Maciej Kornatow"
     )))
+
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="catman",
+        length=2.7,
+        premiere=date(2025, 2, 25),
+        director="Maciej Kornatow"
+    )))
+
 
     movies.append(await movie_service.add_movie(MovieIn(
         name="wicked",
@@ -105,11 +113,30 @@ async def main(
 
     reservations.append(await reservation_service.add_reservation(ReservationIn(
         repertoire_id= repertoires[3].id,
+        firstName= "Franek",
+        lastName= "Kowalski",
+        telephone= "666000999",
+        email= "kamil@gmail.com",
+        number_of_seats=2
+
+    )))
+
+    reservations.append(await reservation_service.add_reservation(ReservationIn(
+        repertoire_id= repertoires[0].id,
         firstName= "Marek",
         lastName= "Kowalski",
         telephone= "666000999",
         email= "kamil@gmail.com",
-        price= 60.80,
+        number_of_seats=2
+
+    )))
+
+    reservations.append(await reservation_service.add_reservation(ReservationIn(
+        repertoire_id= repertoires[2].id,
+        firstName= "Marek",
+        lastName= "Kowalski",
+        telephone= "666000999",
+        email= "kamil@gmail.com",
         number_of_seats=2
 
     )))

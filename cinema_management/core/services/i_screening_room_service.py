@@ -18,6 +18,8 @@ class IScreening_roomService(ABC):
         """
 
 
+
+
     @abstractmethod
     async def get_by_id(self, screening_room_id: int) -> Screening_room | None:
         """The method getting screening_room by provided id.

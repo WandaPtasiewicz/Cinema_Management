@@ -31,6 +31,28 @@ async def create_repertoire(
 
     return new_repertoire.model_dump() if new_repertoire else {}
 
+@router.get("/free_seats/{repertoire_id}", response_model=dict, status_code=200)
+@inject
+async def available_seats(
+        repertoire_id: int,
+        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+) -> Iterable:
+    """An endpoint for getting all repertoires.
+
+    Args:
+        service (IRepertoireService, optional): The injected service dependency.
+
+    Returns:
+        Iterable: The repertoire attributes collection.
+    """
+
+    if available_seats := await service.available_seats(repertoire_id):
+        return {
+            "available_seats": available_seats
+        }
+
+    raise HTTPException(status_code=404, detail="Reservation not found")
+
 @router.get("/all", response_model=Iterable[Repertoire], status_code=200)
 @inject
 async def get_all_repertoires(

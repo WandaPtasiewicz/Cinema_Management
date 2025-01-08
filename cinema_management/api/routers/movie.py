@@ -1,6 +1,6 @@
 """A module containing continent endpoints."""
 
-from typing import Iterable
+from typing import Iterable, List
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -50,6 +50,23 @@ async def get_all_movies(
 
     return movies
 
+@router.get("/upcoming_movies", response_model=List[Movie], status_code=200)
+@inject
+async def get_all_upcoming_movies(
+        service: IMovieService = Depends(Provide[Container.movie_service]),
+) -> Iterable:
+    """An endpoint for getting all movies.
+
+    Args:
+        service (IMovieService, optional): The injected service dependency.
+
+    Returns:
+        Iterable: The movie attributes collection.
+    """
+
+    movies = await service.get_all_upcoming_movies()
+
+    return movies
 
 
 @router.get("/{movie_id}",response_model=Movie,status_code=200,)

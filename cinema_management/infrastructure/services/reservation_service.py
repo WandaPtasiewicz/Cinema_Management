@@ -1,11 +1,11 @@
 """Module containing continent service implementation."""
 
-from typing import Iterable
+from typing import Iterable, List
 
 from cinema_management.core.domains.reservation import Reservation, ReservationIn
 from cinema_management.core.repositories.i_reservation_repository import IReservationRepository
 from cinema_management.core.services.i_reservation_service import IReservationService
-
+from cinema_management.db import reservations_table
 
 
 class ReservationService(IReservationService):
@@ -49,7 +49,7 @@ class ReservationService(IReservationService):
 
         return await self._reservation_repository.get_by_id(reservation_id)
 
-    async def get_by_repertoire_id(self, repertoire_id: int) -> Reservation | None:
+    async def get_by_repertoire_id(self, repertoire_id: int) -> List[Reservation] | None:
         """The method getting reservation by provided id.
 
         Args:
@@ -58,8 +58,17 @@ class ReservationService(IReservationService):
         Returns:
             Reservation | None: The reservation details.
         """
+        all_reservations = await self.get_all()
+        filtered_reservations = [reservation for reservation in all_reservations if reservation.repertoire_id == repertoire_id]
 
-        return await self._reservation_repository.get_by_repertoire_id(repertoire_id)
+        return filtered_reservations
+
+    async def count_all_reservation_repertoire_id(self, repertoire_id: id) -> int:
+        return len(await self.get_by_repertoire_id( repertoire_id))
+
+
+
+
 
     async def add_reservation(self, data: ReservationIn) -> Reservation | None:
         """The method adding new reservation to the data storage.

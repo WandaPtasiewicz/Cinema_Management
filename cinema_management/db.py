@@ -56,7 +56,6 @@ reservations_table = sqlalchemy.Table(
     sqlalchemy.Column("lastName",sqlalchemy.String),
     sqlalchemy.Column("telephone",sqlalchemy.String),
     sqlalchemy.Column("email",sqlalchemy.String),
-    sqlalchemy.Column("price",sqlalchemy.Float),
     sqlalchemy.Column("number_of_seats",sqlalchemy.Integer),
 
 )

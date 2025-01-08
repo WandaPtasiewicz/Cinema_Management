@@ -17,6 +17,13 @@ class IMovieService(ABC):
             Iterable[Movie]: All movies.
         """
 
+    @abstractmethod
+    async def get_all_upcoming_movies(self) -> Iterable[Movie]:
+        """The method getting all upcoming movies from the repository.
+
+        Returns:
+            Iterable[Movie]: All movies.
+        """
 
     @abstractmethod
     async def get_by_id(self, movie_id: int) -> Movie | None:

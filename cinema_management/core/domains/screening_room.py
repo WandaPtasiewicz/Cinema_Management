@@ -9,7 +9,7 @@ from datetime import date
 class Screening_roomIn(BaseModel):
     """Model representing movie's DTO attributes."""
     number: int
-    rows_count: float
+    rows_count: int
     seats_in_row: int
 
 
@@ -37,3 +37,6 @@ class Screening_room(Screening_roomIn):
             rows_count=record_dict.get("rows_count"), # type: ignore
             seats_in_row=record_dict.get("seats_in_row"), # type: ignore
         )
+
+    def number_of_seats(self) -> int:
+        return self.seats_in_row * self.rows_count

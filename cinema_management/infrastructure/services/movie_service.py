@@ -1,6 +1,6 @@
 """Module containing continent service implementation."""
-
-from typing import Iterable
+import datetime
+from typing import Iterable, List
 
 from cinema_management.core.domains.movie import Movie, MovieIn
 from cinema_management.core.repositories.i_movie_repository import IMovieRepository
@@ -30,6 +30,22 @@ class MovieService(IMovieService):
         """
 
         return await self._movie_repository.get_all_movies()
+
+    async def get_all_upcoming_movies(self) -> List[Movie]:
+        """The method getting all upcoming movies from the repository.
+
+        Returns:
+            Iterable[Movie]: All movies.
+        """
+        all_movies = await self.get_all()
+        today = datetime.date.today()
+        new_movies = [movies for movies in all_movies if movies.premiere > today]
+
+        return new_movies
+
+
+
+
 
     async def get_by_id(self, movie_id: int) -> Movie | None:
         """The method getting movie by provided id.

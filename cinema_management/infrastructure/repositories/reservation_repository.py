@@ -44,19 +44,7 @@ class ReservationRepository(IReservationRepository):
 
         return Reservation.from_record(reservation) if reservation else None
 
-    async def get_by_repertoire_id(self, repertoire_id: int) -> Any | None:
-        """The method getting reservation by provided id.
 
-        Args:
-            repertoire_id (int): The id of the repertoire.
-
-        Returns:
-            Any | None: The reservation details.
-        """
-
-        reservation = await self._get_by_repertoire_id(repertoire_id)
-
-        return Reservation.from_record(reservation) if reservation else None
 
     async def add_reservation(self, data: ReservationIn) -> Any | None:
         """The method adding new reservation to the data storage.
@@ -144,20 +132,3 @@ class ReservationRepository(IReservationRepository):
 
         return await database.fetch_one(query)
 
-    async def _get_by_repertoire_id(self, repertoire_id: int) -> Record | None:
-        """A private method getting reservation from the DB based on its ID.
-
-        Args:
-            repertoire_id (int): The ID of the repertoire.
-
-        Returns:
-            Any | None: Reservation record if exists.
-        """
-
-        query = (
-            reservations_table.select()
-            .where(reservations_table.c.repertoire_id == repertoire_id)
-
-        )
-
-        return await database.fetch_one(query)

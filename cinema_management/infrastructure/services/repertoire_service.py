@@ -5,22 +5,32 @@ from typing import Iterable
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
 from cinema_management.core.repositories.i_repertoire_repository import IRepertoireRepository
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
-
+from cinema_management.core.services.i_reservation_service import IReservationService
+from cinema_management.core.services.i_screening_room_service import IScreening_roomService
 
 
 class RepertoireService(IRepertoireService):
     """A class implementing the repertoire service."""
 
     _repertoire_repository: IRepertoireRepository
+    _reservation_service: IReservationService
+    _screening_room_service: IScreening_roomService
 
 
-    def __init__(self, repertoire_repository: IRepertoireRepository) -> None:
+    def __init__(self,
+                 repertoire_repository: IRepertoireRepository,
+                 reservation_service: IReservationService,
+                 screening_room_service: IScreening_roomService) -> None:
         """The initializer of the `repertoire service`.
 
         Args:
             repository (IRepertoireRepository): The reference to the repository.
         """
         self._repertoire_repository = repertoire_repository
+        self._reservations_service = reservation_service
+        self._screening_room_service = screening_room_service
+
+
 
     async def get_all(self) -> Iterable[Repertoire]:
         """The method getting all repertoires from the repository.
@@ -30,6 +40,43 @@ class RepertoireService(IRepertoireService):
         """
 
         return await self._repertoire_repository.get_all_repertoires()
+
+    async def number_of_taken_seats(self, repertoire_id: int) -> int:
+        """The method getting number of free seats by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            number of free seats.
+        """
+        reservations = await self._reservations_service.get_by_repertoire_id(repertoire_id)
+        taken_seats = 0
+        for reservation in reservations:
+            taken_seats += reservation.number_of_seats
+
+        return taken_seats
+
+
+    async def available_seats(self, repertoire_id: int) -> int:
+        """The method getting number of free seats by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            number of free seats.
+        """
+
+        taken_seats = await self.number_of_taken_seats(repertoire_id)
+        repertoire = await self.get_by_id(repertoire_id)
+        screening_room = await self._screening_room_service.get_by_id(repertoire.screening_room_id)
+        free_seats = screening_room.number_of_seats()
+
+        return free_seats - taken_seats
+
+
+
 
     async def get_by_id(self, repertoire_id: int) -> Repertoire | None:
         """The method getting repertoire by provided id.

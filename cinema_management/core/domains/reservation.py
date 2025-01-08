@@ -13,7 +13,6 @@ class ReservationIn(BaseModel):
     lastName: str
     telephone: str
     email: str
-    price: float
     number_of_seats:int
 
 
@@ -42,6 +41,8 @@ class Reservation(ReservationIn):
             lastName=record_dict.get("lastName"), # type: ignore
             telephone=record_dict.get("telephone"), # type: ignore
             email=record_dict.get("email"), # type: ignore
-            price=record_dict.get("price"), # type: ignore
             number_of_seats=record_dict.get("number_of_seats"), # type: ignore
         )
+
+    def get_price(self) -> float:
+        return self.number_of_seats * 30.00

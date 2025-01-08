@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from cinema_management.container import Container
 from cinema_management.core.domains.reservation import Reservation, ReservationIn
 from cinema_management.core.services.i_reservation_service import IReservationService
+from cinema_management.core.services.i_repertoire_service import IRepertoireService
 
 router = APIRouter()
 
@@ -15,21 +16,24 @@ router = APIRouter()
 @inject
 async def create_reservation(
         reservation: ReservationIn,
-        service: IReservationService = Depends(Provide[Container.reservation_service]),
+        reservation_service: IReservationService = Depends(Provide[Container.reservation_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 ) -> dict:
     """An endpoint for adding new reservation.
 
+
     Args:
         reservation (ReservationIn): The reservation data.
-        service (IReservationService, optional): The injected service dependency.
+        reservation_service (IReservationService, optional): The injected service dependency.
 
     Returns:
         dict: The new reservation attributes.
     """
+    if reservation.number_of_seats > await repertoire_service.available_seats(ReservationIn.repertoire_id):
+        raise HTTPException(status_code=400, detail="Brak tylu miejsc")
+    
 
-    new_reservation = await service.add_reservation(reservation)
-
-
+    new_reservation = await reservation_service.add_reservation(reservation)
 
     return new_reservation.model_dump() if new_reservation else {}
 
@@ -53,7 +57,7 @@ async def get_all_reservations(
 
 
 
-@router.get("/{reservation_id}",response_model=Reservation,status_code=200,)
+@router.get("/id/{reservation_id}",response_model=Reservation,status_code=200,)
 @inject
 async def get_reservation_by_id(
         reservation_id: int,
@@ -74,7 +78,7 @@ async def get_reservation_by_id(
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
-@router.get("/{repertoire_id}",response_model=Reservation,status_code=200,)
+@router.get("/repertoireId/{repertoire_id}",response_model=Iterable[Reservation],status_code=200,)
 @inject
 async def get_reservation_by_repertoire_id(
         repertoire_id: int,
@@ -90,8 +94,31 @@ async def get_reservation_by_repertoire_id(
         dict | None: The reservation details.
     """
 
-    if reservation := await service.get_by_repertoire_id(repertoire_id):
-        return reservation.model_dump()
+    if reservations := await service.get_by_repertoire_id(repertoire_id):
+        return reservations
+
+    raise HTTPException(status_code=404, detail="Reservation not found")
+
+@router.get("/taken_seats/{repertoire_id}",response_model=dict,status_code=200,)
+@inject
+async def number_of_taken_seats(
+        repertoire_id: int,
+        service: IReservationService = Depends(Provide[Container.reservation_service]),
+) -> dict | None:
+    """An endpoint for getting reservation by id.
+
+    Args:
+        repertoire_id (int): The id of the reservation.
+        service (IReservationService, optional): The injected service dependency.
+
+    Returns:
+        dict | None: The reservation details.
+    """
+
+    if taken_seats := await service.number_of_taken_seats(repertoire_id):
+        return {
+            "taken_seats": taken_seats
+        }
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
