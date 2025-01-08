@@ -24,6 +24,7 @@ async def main(
     movies=[]
     screening_rooms =[]
     repertoires =[]
+    reservations=[]
 
     movies.append(await movie_service.add_movie(MovieIn(
         name="shrek",
@@ -87,6 +88,32 @@ async def main(
         start_time= time(14,30),
         date =date(2025,1,8)
     )))
+
+    repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
+        movie_id= movies[1].id,
+        screening_room_id = screening_rooms[1].id,
+        start_time= time(17,20),
+        date =date(2025,1,8)
+    )))
+
+    repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
+        movie_id= movies[3].id,
+        screening_room_id = screening_rooms[2].id,
+        start_time= time(20,00),
+        date =date(2025,1,8)
+    )))
+
+    reservations.append(await reservation_service.add_reservation(ReservationIn(
+        repertoire_id= repertoires[3].id,
+        firstName= "Marek",
+        lastName= "Kowalski",
+        telephone= "666000999",
+        email= "kamil@gmail.com",
+        price= 60.80,
+        number_of_seats=2
+
+    )))
+
 
 
  

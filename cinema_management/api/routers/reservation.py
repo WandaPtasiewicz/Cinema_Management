@@ -90,7 +90,7 @@ async def get_reservation_by_repertoire_id(
         dict | None: The reservation details.
     """
 
-    if reservation := await service.get_by_id(repertoire_id):
+    if reservation := await service.get_by_repertoire_id(repertoire_id):
         return reservation.model_dump()
 
     raise HTTPException(status_code=404, detail="Reservation not found")

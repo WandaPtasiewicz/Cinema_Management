@@ -53,13 +53,13 @@ class ReservationService(IReservationService):
         """The method getting reservation by provided id.
 
         Args:
-            reservation_id (int): The id of the reservation.
+            repertoire_id (int): The id of the reservation.
 
         Returns:
             Reservation | None: The reservation details.
         """
 
-        return await self._reservation_repository.get_by_id(repertoire_id)
+        return await self._reservation_repository.get_by_repertoire_id(repertoire_id)
 
     async def add_reservation(self, data: ReservationIn) -> Reservation | None:
         """The method adding new reservation to the data storage.

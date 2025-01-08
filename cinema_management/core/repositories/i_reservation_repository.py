@@ -29,6 +29,17 @@ class IReservationRepository(ABC):
         """
 
     @abstractmethod
+    async def get_by_repertoire_id(self,repertoire_id: int) -> Any| None:
+        """The abstract getting reservation by provided id.
+
+        Args:
+            repertoire_id(int): The id of the repertoire.
+
+        Returns:
+            Any | None: The reservation details.
+        """
+
+    @abstractmethod
     async def add_reservation(self, data: ReservationIn) -> Any | None:
         """The abstract adding new reservation to the data storage.
 
