@@ -62,7 +62,40 @@ async def main(
         director="Maciej Kornatow"
     )))
 
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="Grinch",
+        length=2.11,
+        premiere=date(200, 2, 12),
+        director="Maciej Kornatow"
+    )))
 
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="Smerfy",
+        length=1.8,
+        premiere=date(2025, 1, 30),
+        director="Maciej Kornatow"
+    )))
+
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="Awatar",
+        length=3.4,
+        premiere=date(2013, 2, 7),
+        director="Maciej Kornatow"
+    )))
+
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="Warcraft",
+        length=3.3,
+        premiere=date(2018, 5, 12),
+        director="Maciej Kornatow"
+    )))
+
+    movies.append(await movie_service.add_movie(MovieIn(
+        name="Matylda",
+        length=2.8,
+        premiere=date(2025, 12, 1),
+        director="Maciej Kornatow"
+    )))
 
     screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
         number= 1,
@@ -91,14 +124,14 @@ async def main(
     )))
 
     repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
-        movie_id= movies[1].id,
+        movie_id= movies[0].id,
         screening_room_id = screening_rooms[1].id,
         start_time= time(14,30),
         date =date(2025,1,8)
     )))
 
     repertoires.append(await repertoire_service.add_repertoire(RepertoireIn(
-        movie_id= movies[1].id,
+        movie_id= movies[0].id,
         screening_room_id = screening_rooms[1].id,
         start_time= time(17,20),
         date =date(2025,1,8)
@@ -112,7 +145,7 @@ async def main(
     )))
 
     reservations.append(await reservation_service.add_reservation(ReservationIn(
-        repertoire_id= repertoires[3].id,
+        repertoire_id= repertoires[0].id,
         firstName= "Franek",
         lastName= "Kowalski",
         telephone= "666000999",
@@ -122,7 +155,7 @@ async def main(
     )))
 
     reservations.append(await reservation_service.add_reservation(ReservationIn(
-        repertoire_id= repertoires[0].id,
+        repertoire_id= repertoires[1].id,
         firstName= "Marek",
         lastName= "Kowalski",
         telephone= "666000999",

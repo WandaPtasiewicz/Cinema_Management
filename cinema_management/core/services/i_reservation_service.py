@@ -51,7 +51,16 @@ class IReservationService(ABC):
             number of reservations.
         """
 
-   
+    @abstractmethod
+    async def invoice(self,reservation_id: id) -> dict:
+        """The method getting invoice by provided repertoire_id.
+
+        Args:
+            repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            invoice.
+        """
 
     @abstractmethod
     async def add_reservation(self, data: ReservationIn) -> Reservation | None:

@@ -32,8 +32,24 @@ class ReservationService(IReservationService):
         return await self._reservation_repository.get_all_reservations()
 
 
+    async def invoice(self,reservation_id: id, address: str) -> dict:
+        """The method getting invoice by provided repertoire_id.
 
+        Args:
+            repertoire_id (int): The id of the repertoire.
 
+        Returns:
+            invoice.
+        """
+        reservation = await self.get_by_id(reservation_id)
+        return {
+            "Buyer": reservation.firstName+" "+reservation.lastName,
+            "Buyer's address": address,
+            "Seller": "Cinema name",
+            "Seller's address": "Olsztyn ul kwiatowa 16 11-064 Olsztyn",
+            "items on invoice": str(reservation.number_of_seats)+" ticket(s)",
+            "price": str(reservation.get_price()) +" zł"
+        }
 
 
 

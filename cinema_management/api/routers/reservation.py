@@ -29,7 +29,7 @@ async def create_reservation(
     Returns:
         dict: The new reservation attributes.
     """
-    if reservation.number_of_seats > await repertoire_service.available_seats(ReservationIn.repertoire_id):
+    if reservation.number_of_seats > await repertoire_service.available_seats(reservation.repertoire_id):
         raise HTTPException(status_code=400, detail="Brak tylu miejsc")
     
 
@@ -119,6 +119,27 @@ async def number_of_taken_seats(
         return {
             "taken_seats": taken_seats
         }
+
+    raise HTTPException(status_code=404, detail="Reservation not found")
+
+@router.get("/invoice/{repertoire_id,address}",response_model=dict,status_code=200,)
+@inject
+async def invoice(
+        repertoire_id: int,
+        address: str,
+        service: IReservationService = Depends(Provide[Container.reservation_service]),
+) -> dict | None:
+    """An endpoint for getting reservation by id.
+
+    Args:
+        repertoire_id (int): The id of the reservation.
+        service (IReservationService, optional): The injected service dependency.
+
+    Returns:
+        dict | None: The reservation details.
+    """
+
+    return await service.invoice(repertoire_id,address)
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
