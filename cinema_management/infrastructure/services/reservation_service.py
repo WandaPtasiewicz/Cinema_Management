@@ -80,10 +80,15 @@ class ReservationService(IReservationService):
         return filtered_reservations
 
     async def count_all_reservation_repertoire_id(self, repertoire_id: id) -> int:
+        """The method getting number of reservations by provided id.
+
+        Args:
+            repertoire_id (int): The id of the reservation.
+
+        Returns:
+            int | None: number of reservations.
+        """
         return len(await self.get_by_repertoire_id( repertoire_id))
-
-
-
 
 
     async def add_reservation(self, data: ReservationIn) -> Reservation | None:

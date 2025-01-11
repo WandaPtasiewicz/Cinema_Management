@@ -125,7 +125,6 @@ class Screening_roomRepository(IScreening_roomRepository):
         query = (
             screening_rooms_table.select()
             .where(screening_rooms_table.c.id == screening_room_id)
-            .order_by(screening_rooms_table.c.number.asc())
         )
 
         return await database.fetch_one(query)

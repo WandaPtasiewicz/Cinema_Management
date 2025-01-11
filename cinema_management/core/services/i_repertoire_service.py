@@ -1,7 +1,7 @@
 """Module containing repertoire service abstractions."""
 
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, List
 
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
 
@@ -24,6 +24,28 @@ class IRepertoireService(ABC):
 
         Args:
             repertoire_id (int): The id of the repertoire.
+
+        Returns:
+            Repertoire | None: The repertoire details.
+        """
+
+    @abstractmethod
+    async def get_by_screening_room_id(self, screening_room_id: int) -> List[Repertoire] | None:
+        """The method getting repertoire by provided screening_room id.
+
+        Args:
+            screening_room_id (int): The id of the screening_room.
+
+        Returns:
+            Repertoire | None: The repertoire details.
+        """
+
+    @abstractmethod
+    async def get_by_movie_id(self, movie_id: int) -> List[Repertoire] | None:
+        """The method getting repertoire by provided movie id.
+
+        Args:
+            movie_id (int): The id of the movie.
 
         Returns:
             Repertoire | None: The repertoire details.

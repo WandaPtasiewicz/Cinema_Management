@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from cinema_management.container import Container
 from cinema_management.core.domains.screening_room import Screening_room, Screening_roomIn
+from cinema_management.core.services.i_repertoire_service import IRepertoireService
 from cinema_management.core.services.i_screening_room_service import IScreening_roomService
 
 router = APIRouter()
@@ -37,6 +38,7 @@ async def create_screening_room(
 @inject
 async def get_all_screening_rooms(
         service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+
 ) -> Iterable:
     """An endpoint for getting all screening_rooms.
 
@@ -136,20 +138,22 @@ async def update_screening_room(
 async def delete_screening_room(
         screening_room_id: int,
         service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+
+
 ) -> None:
     """An endpoint for deleting screening_rooms.
 
     Args:
         screening_room_id (int): The id of the screening_room.
-        service (IcontinentService, optional): The injected service dependency.
+        service (IScreening_roomService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if screening_room does not exist.
     """
 
     if await service.get_by_id(screening_room_id=screening_room_id):
-        await service.delete_screening_room(screening_room_id)
 
+        await service.delete_screening_room(screening_room_id)
         return
 
     raise HTTPException(status_code=404, detail="Screening_room not found")

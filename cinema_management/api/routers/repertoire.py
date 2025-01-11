@@ -1,6 +1,6 @@
 """A module containing continent endpoints."""
 
-from typing import Iterable
+from typing import Iterable, List
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -94,6 +94,47 @@ async def get_repertoire_by_id(
 
     raise HTTPException(status_code=404, detail="Repertoire not found")
 
+@router.get("/movie_id/{movie_id}",response_model=List[Repertoire],status_code=200,)
+@inject
+async def get_repertoire_by_movie_id(
+        movie_id: int,
+        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+) -> dict | None:
+    """An endpoint for getting repertoire by movie id.
+
+    Args:
+        movie_id (int): The id of the movie.
+        service (IRepertoireService, optional): The injected service dependency.
+
+    Returns:
+        dict | None: The repertoire details.
+    """
+
+    if repertoire := await service.get_by_movie_id(movie_id):
+        return repertoire
+
+    raise HTTPException(status_code=404, detail="Repertoire not found")
+
+@router.get("/screening_room_id/{movie_id}",response_model=List[Repertoire],status_code=200,)
+@inject
+async def get_repertoire_by_screening_room_id(
+        screening_room_id: int,
+        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+) -> dict | None:
+    """An endpoint for getting repertoire by screening_room id.
+
+    Args:
+        screening_room_id (int): The id of the movie.
+        service (IRepertoireService, optional): The injected service dependency.
+
+    Returns:
+        dict | None: The repertoire details.
+    """
+
+    if repertoire := await service.get_by_screening_room_id(screening_room_id):
+        return repertoire
+
+    raise HTTPException(status_code=404, detail="Repertoire not found")
 
 @router.get(
     "/user/{user_id}",

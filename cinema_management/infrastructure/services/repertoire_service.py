@@ -1,6 +1,6 @@
 """Module containing continent service implementation."""
 
-from typing import Iterable
+from typing import Iterable, List
 
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
 from cinema_management.core.repositories.i_repertoire_repository import IRepertoireRepository
@@ -77,6 +77,33 @@ class RepertoireService(IRepertoireService):
 
 
 
+    async def get_by_screening_room_id(self, screening_room_id: int) -> List[Repertoire] | None:
+        """The method getting repertoire by provided screening_room id.
+
+        Args:
+            repertoire_id (int): The id of the screening_room.
+
+        Returns:
+            Repertoire | None: The repertoire details.
+        """
+        all_repertoires = await self.get_all()
+        filtered_repertoires = [repertoire for repertoire in all_repertoires if repertoire.screening_room_id == screening_room_id]
+
+        return filtered_repertoires
+
+    async def get_by_movie_id(self, movie_id: int) -> List[Repertoire] | None:
+        """The method getting repertoire by provided movie id.
+
+        Args:
+            movie_id (int): The id of the movie.
+
+        Returns:
+            Repertoire | None: The repertoire details.
+        """
+        all_repertoires = await self.get_all()
+        filtered_repertoires = [repertoire for repertoire in all_repertoires if repertoire.movie_id == movie_id]
+
+        return filtered_repertoires
 
     async def get_by_id(self, repertoire_id: int) -> Repertoire | None:
         """The method getting repertoire by provided id.

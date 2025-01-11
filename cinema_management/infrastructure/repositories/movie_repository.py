@@ -24,7 +24,6 @@ class MovieRepository(IMovieRepository):
 
         query = (
             select(movies_table)
-            .order_by(movies_table.c.name.asc())
         )
         movies = await database.fetch_all(query)
 
@@ -125,7 +124,6 @@ class MovieRepository(IMovieRepository):
         query = (
             movies_table.select()
             .where(movies_table.c.id == movie_id)
-            .order_by(movies_table.c.name.asc())
         )
 
         return await database.fetch_one(query)
