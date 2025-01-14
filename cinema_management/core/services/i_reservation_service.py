@@ -17,7 +17,6 @@ class IReservationService(ABC):
             Iterable[Reservation]: All reservations.
         """
 
-
     @abstractmethod
     async def get_by_id(self, reservation_id: int) -> Reservation | None:
         """The method getting reservation by provided id.
@@ -100,4 +99,3 @@ class IReservationService(ABC):
         Returns:
             bool: Success of the operation.
         """
-

@@ -77,7 +77,6 @@ async def get_screening_room_by_id(
     raise HTTPException(status_code=404, detail="Screening_room not found")
 
 
-
 @router.put("/{screening_room_id}", response_model=ScreeningRoom, status_code=201)
 @inject
 async def update_screening_room(

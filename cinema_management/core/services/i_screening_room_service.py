@@ -2,7 +2,6 @@
 
 from abc import ABC, abstractmethod
 from typing import Iterable
-
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 
 

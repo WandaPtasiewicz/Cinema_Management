@@ -1,17 +1,12 @@
 """Module containing movie-related domain models"""
-
-
 from asyncpg import Record
 from pydantic import BaseModel, ConfigDict
-
-
 
 class ScreeningRoomIn(BaseModel):
     """Model representing movie's DTO attributes."""
     number: int
     rows_count: int
     seats_in_row: int
-
 
 class ScreeningRoom(ScreeningRoomIn):
     """Model representing movie's attributes in the database."""

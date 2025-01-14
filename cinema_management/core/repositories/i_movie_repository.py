@@ -2,9 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Any, Iterable
-
 from cinema_management.core.domains.movie import MovieIn
-
 
 class IMovieRepository(ABC):
     """An abstract class representing protocol of continent repository."""

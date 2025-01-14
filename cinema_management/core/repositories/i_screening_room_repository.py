@@ -5,7 +5,6 @@ from typing import Any, Iterable
 
 from cinema_management.core.domains.screeningroom import ScreeningRoomIn
 
-
 class IScreeningRoomRepository(ABC):
     """An abstract class representing protocol of continent repository."""
 

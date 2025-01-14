@@ -5,15 +5,12 @@ from pydantic import BaseModel, ConfigDict
 from datetime import date
 from datetime import time
 
-
 class RepertoireIn(BaseModel):
     """Model representing repertoire's DTO attributes."""
     movie_id: int
     screening_room_id: int
     start_time: time
     date: date
-
-
 
 class Repertoire(RepertoireIn):
     """Model representing repertoire's attributes in the database."""

@@ -1,10 +1,7 @@
 """Module containing movie-related domain models"""
-
-
 from asyncpg import Record
 from pydantic import BaseModel, ConfigDict
 from datetime import date
-
 
 class MovieIn(BaseModel):
     """Model representing movie's DTO attributes."""
@@ -12,7 +9,6 @@ class MovieIn(BaseModel):
     length: float
     premiere: date
     director: str
-
 
 class Movie(MovieIn):
     """Model representing movie's attributes in the database."""

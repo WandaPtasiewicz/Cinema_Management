@@ -32,8 +32,6 @@ class RepertoireService(IRepertoireService):
         self._reservations_service = reservation_service
         self._screening_room_service = screening_room_service
 
-
-
     async def get_all(self) -> Iterable[Repertoire]:
         """The method getting all repertoires from the repository.
 
@@ -76,7 +74,6 @@ class RepertoireService(IRepertoireService):
         free_seats = screening_room.number_of_seats()
 
         return free_seats - taken_seats
-
 
 
     async def get_by_screening_room_id(self, screening_room_id: int) -> List[Repertoire] | None:
@@ -163,6 +160,3 @@ class RepertoireService(IRepertoireService):
         """
 
         return await self._repertoire_repository.delete_repertoire(repertoire_id)
-
-
-

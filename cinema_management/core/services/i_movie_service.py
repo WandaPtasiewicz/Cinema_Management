@@ -2,9 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Iterable
-
 from cinema_management.core.domains.movie import Movie, MovieIn
-
 
 class IMovieService(ABC):
     """A class representing movie repository."""
@@ -35,7 +33,6 @@ class IMovieService(ABC):
         Returns:
             Movie | None: The movie details.
         """
-
 
     @abstractmethod
     async def add_movie(self, data: MovieIn) -> Movie | None:

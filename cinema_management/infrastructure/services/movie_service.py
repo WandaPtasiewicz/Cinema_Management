@@ -18,7 +18,7 @@ class MovieService(IMovieService):
         """The initializer of the `movie service`.
 
         Args:
-            repository (IMovieRepository): The reference to the repository.
+            movie_repository (IMovieRepository): The reference to the repository.
         """
         self._movie_repository = movie_repository
 

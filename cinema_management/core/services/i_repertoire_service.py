@@ -2,9 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import Iterable, List
-
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
-
 
 class IRepertoireService(ABC):
     """A class representing repertoire repository."""
@@ -16,7 +14,6 @@ class IRepertoireService(ABC):
         Returns:
             Iterable[Repertoire]: All repertoires.
         """
-
 
     @abstractmethod
     async def get_by_id(self, repertoire_id: int) -> Repertoire | None:
@@ -110,5 +107,3 @@ class IRepertoireService(ABC):
         Returns:
             bool: Success of the operation.
         """
-
-

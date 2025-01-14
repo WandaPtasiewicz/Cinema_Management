@@ -7,7 +7,6 @@ from cinema_management.core.repositories.i_screening_room_repository import IScr
 from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 
 
-
 class ScreeningRoomService(IScreeningRoomService):
     """A class implementing the screening_room service."""
 
@@ -52,7 +51,6 @@ class ScreeningRoomService(IScreeningRoomService):
         Returns:
             ScreeningRoom | None: Full details of the newly added screening_room.
         """
-
 
         return await self._screening_room_repository.add_screening_room(data)
 

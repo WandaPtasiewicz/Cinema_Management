@@ -52,7 +52,6 @@ class ReservationService(IReservationService):
         }
 
 
-
     async def get_by_id(self, reservation_id: int) -> Reservation | None:
         """The method getting reservation by provided id.
 
