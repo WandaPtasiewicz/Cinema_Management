@@ -4,11 +4,11 @@ from typing import Iterable
 
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 from cinema_management.core.repositories.i_screening_room_repository import IScreeningRoomRepository
-from cinema_management.core.services.i_screening_room_service import IScreening_roomService
+from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 
 
 
-class Screening_roomService(IScreening_roomService):
+class ScreeningRoomService(IScreeningRoomService):
     """A class implementing the screening_room service."""
 
     _screening_room_repository: IScreeningRoomRepository

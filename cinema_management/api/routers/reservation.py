@@ -30,6 +30,9 @@ async def create_reservation(
     Returns:
         dict: The new reservation attributes.
     """
+    if not await repertoire_service.get_by_id(reservation.repertoire_id):
+        raise HTTPException(status_code=400, detail="Invalid argument(s)")
+
     if reservation.number_of_seats > await repertoire_service.available_seats(reservation.repertoire_id):
         raise HTTPException(status_code=400, detail="There is no available seats")
 
@@ -129,24 +132,30 @@ async def invoice(
 async def update_reservation(
         reservation_id: int,
         updated_reservation: ReservationIn,
-        service: IReservationService = Depends(Provide[Container.reservation_service]),
+        reservation_service: IReservationService = Depends(Provide[Container.reservation_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 ) -> dict:
     """An endpoint for updating reservation data.
 
     Args:
         reservation_id (int): The id of the reservation.
         updated_reservation (ReservationIn): The updated reservation details.
-        service (IReservationService, optional): The injected service dependency.
+        reservation_service (IReservationService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if reservation does not exist.
+        HTTPException: 400 if reservation does invalid argument(s).
 
     Returns:
         dict: The updated reservation details.
     """
 
-    if await service.get_by_id(reservation_id=reservation_id):
-        await service.update_reservation(
+    if not await repertoire_service.get_by_id(updated_reservation.repertoire_id):
+        raise HTTPException(status_code=400, detail="Invalid argument(s)")
+
+    if await reservation_service.get_by_id(reservation_id=reservation_id):
+        await reservation_service.update_reservation(
             reservation_id=reservation_id,
             data=updated_reservation,
         )

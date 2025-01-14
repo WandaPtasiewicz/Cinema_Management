@@ -6,7 +6,7 @@ from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
 from cinema_management.core.repositories.i_repertoire_repository import IRepertoireRepository
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
 from cinema_management.core.services.i_reservation_service import IReservationService
-from cinema_management.core.services.i_screening_room_service import IScreening_roomService
+from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 
 
 class RepertoireService(IRepertoireService):
@@ -14,19 +14,19 @@ class RepertoireService(IRepertoireService):
 
     _repertoire_repository: IRepertoireRepository
     _reservation_service: IReservationService
-    _screening_room_service: IScreening_roomService
+    _screening_room_service: IScreeningRoomService
 
 
     def __init__(self,
                  repertoire_repository: IRepertoireRepository,
                  reservation_service: IReservationService,
-                 screening_room_service: IScreening_roomService) -> None:
+                 screening_room_service: IScreeningRoomService) -> None:
         """The initializer of the `repertoire service`.
 
         Args:
             repertoire_repository (IRepertoireRepository): The reference to the repository.
             reservation_service (IReservationService): The reference to the reservation service.
-            screening_room_service (IScreening_roomService): The reference to the screening_room service.
+            screening_room_service (IScreeningRoomService): The reference to the screening_room service.
         """
         self._repertoire_repository = repertoire_repository
         self._reservations_service = reservation_service

@@ -8,7 +8,7 @@ from cinema_management.core.domains.reservation import ReservationIn
 from cinema_management.core.domains.repertoire import RepertoireIn
 from cinema_management.core.services.i_reservation_service import IReservationService
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
-from cinema_management.core.services.i_screening_room_service import IScreening_roomService
+from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 from cinema_management.core.services.i_movie_service import IMovieService
 from cinema_management.container import Container
 from cinema_management.db import screening_rooms_table
@@ -18,7 +18,7 @@ async def main(
         movie_service: IMovieService = Provide[Container.movie_service],
         repertoire_service: IRepertoireService = Provide[Container.repertoire_service],
         reservation_service: IReservationService = Provide[Container.reservation_service],
-        screening_room_service: IScreening_roomService = Provide[Container.screening_room_service]
+        screening_room_service: IScreeningRoomService = Provide[Container.screening_room_service]
 
 ):
     movies=[]

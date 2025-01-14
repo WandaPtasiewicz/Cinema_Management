@@ -6,7 +6,7 @@ from typing import Iterable
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 
 
-class IScreening_roomService(ABC):
+class IScreeningRoomService(ABC):
     """A class representing screening_room repository."""
 
     @abstractmethod

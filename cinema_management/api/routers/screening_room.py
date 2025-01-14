@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from cinema_management.container import Container
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
-from cinema_management.core.services.i_screening_room_service import IScreening_roomService
+from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ router = APIRouter()
 @inject
 async def create_screening_room(
         screening_room: ScreeningRoomIn,
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for adding new screening_room.
 
@@ -37,7 +37,7 @@ async def create_screening_room(
 @router.get("/all", response_model=Iterable[ScreeningRoom], status_code=200)
 @inject
 async def get_all_screening_rooms(
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 
 ) -> Iterable:
     """An endpoint for getting all screening_rooms.
@@ -59,7 +59,7 @@ async def get_all_screening_rooms(
 @inject
 async def get_screening_room_by_id(
         screening_room_id: int,
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict | None:
     """An endpoint for getting screening_room by id.
 
@@ -83,7 +83,7 @@ async def get_screening_room_by_id(
 async def update_screening_room(
         screening_room_id: int,
         updated_screening_room: ScreeningRoomIn,
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for updating screening_room data.
 
@@ -113,7 +113,7 @@ async def update_screening_room(
 @inject
 async def delete_screening_room(
         screening_room_id: int,
-        screening_room_service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        screening_room_service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
         repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 
 ) -> None:

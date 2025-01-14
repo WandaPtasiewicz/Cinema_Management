@@ -6,8 +6,10 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from cinema_management.container import Container
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
+from cinema_management.core.services.i_movie_service import IMovieService
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
 from cinema_management.core.services.i_reservation_service import IReservationService
+from cinema_management.core.services.i_screening_room_service import IScreeningRoomService
 
 router = APIRouter()
 
@@ -16,21 +18,28 @@ router = APIRouter()
 @inject
 async def create_repertoire(
         repertoire: RepertoireIn,
-        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+        movie_service: IMovieService = Depends(Provide[Container.movie_service]),
+        screening_room_service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for adding new repertoire.
 
     Args:
         repertoire (RepertoireIn): The repertoire data.
-        service (IRepertoireService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
+        movie_service (IMovieService, optional): The injected service dependency.
+        screening_room_service (IScreening_roomService, optional): The injected service dependency.
 
     Returns:
         dict: The new repertoire attributes.
     """
+    if await movie_service.get_by_id(repertoire.movie_id) and \
+       await screening_room_service.get_by_id(repertoire.screening_room_id):
+            new_repertoire = await repertoire_service.add_repertoire(repertoire)
+            return new_repertoire.model_dump() if new_repertoire else {}
 
-    new_repertoire = await service.add_repertoire(repertoire)
+    raise HTTPException(status_code=400, detail="Invalid argument(s)")
 
-    return new_repertoire.model_dump() if new_repertoire else {}
 
 
 @router.get("/taken_seats/{repertoire_id}",response_model=dict,status_code=200,)
@@ -57,7 +66,7 @@ async def number_of_taken_seats(
     raise HTTPException(status_code=404, detail="Reservation not found")
 
 
-@router.get("/available/{repertoire_id}", response_model=dict, status_code=200)
+@router.get("/available_seats/{repertoire_id}", response_model=dict, status_code=200)
 @inject
 async def available_seats(
         repertoire_id: int,
@@ -75,7 +84,7 @@ async def available_seats(
 
     if  await service.get_by_id(repertoire_id):
         return {
-            "available_seats": service.available_seats(repertoire_id)
+            "available_seats": await service.available_seats(repertoire_id)
         }
 
     raise HTTPException(status_code=404, detail="Reservation not found")
@@ -170,24 +179,36 @@ async def get_repertoire_by_screening_room_id(
 async def update_repertoire(
         repertoire_id: int,
         updated_repertoire: RepertoireIn,
-        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+        movie_service: IMovieService = Depends(Provide[Container.movie_service]),
+        screening_room_service: IScreeningRoomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for updating repertoire data.
 
     Args:
         repertoire_id (int): The id of the repertoire.
         updated_repertoire (RepertoireIn): The updated repertoire details.
-        service (IRepertoireService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
+        movie_service (IMovieService, optional): The injected service dependency.
+        screening_room_service (IScreening_roomService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if repertoire does not exist.
+        HTTPException: 400 if updated repertoire does Invalid argument(s).
 
     Returns:
         dict: The updated repertoire details.
     """
 
-    if await service.get_by_id(repertoire_id=repertoire_id):
-        await service.update_repertoire(
+    if not await screening_room_service.get_by_id(updated_repertoire.screening_room_id):
+        raise HTTPException(status_code=400, detail="Invalid argument(s)")
+
+    if not await movie_service.get_by_id(updated_repertoire.movie_id):
+        raise HTTPException(status_code=400, detail="Invalid argument(s)")
+
+
+    if await repertoire_service.get_by_id(repertoire_id=repertoire_id):
+        await repertoire_service.update_repertoire(
             repertoire_id=repertoire_id,
             data=updated_repertoire,
         )

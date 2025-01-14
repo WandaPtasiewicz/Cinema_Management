@@ -9,7 +9,7 @@ from cinema_management.infrastructure.repositories.repertoire_repository import 
 from cinema_management.infrastructure.repositories.reservation_repository import  ReservationRepository
 
 from cinema_management.infrastructure.services.movie_service import MovieService
-from cinema_management.infrastructure.services.screening_room_service import  Screening_roomService
+from cinema_management.infrastructure.services.screening_room_service import  ScreeningRoomService
 from cinema_management.infrastructure.services.repertoire_service import RepertoireService
 from cinema_management.infrastructure.services.reservation_service import ReservationService
 
@@ -34,7 +34,7 @@ class Container(DeclarativeContainer):
     )
 
     screening_room_service = Factory(
-        Screening_roomService,
+        ScreeningRoomService,
         screening_room_repository=screening_room_repository,
     )
     repertoire_service = Factory(
