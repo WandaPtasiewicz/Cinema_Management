@@ -57,7 +57,7 @@ async def number_of_taken_seats(
     raise HTTPException(status_code=404, detail="Reservation not found")
 
 
-@router.get("/free_seats/{repertoire_id}", response_model=dict, status_code=200)
+@router.get("/available/{repertoire_id}", response_model=dict, status_code=200)
 @inject
 async def available_seats(
         repertoire_id: int,
@@ -142,7 +142,7 @@ async def get_repertoire_by_movie_id(
 
     raise HTTPException(status_code=404, detail="Repertoire not found")
 
-@router.get("/screening_room_id/{movie_id}",response_model=List[Repertoire],status_code=200,)
+@router.get("/screening_room_id/{screening_id}",response_model=List[Repertoire],status_code=200,)
 @inject
 async def get_repertoire_by_screening_room_id(
         screening_room_id: int,

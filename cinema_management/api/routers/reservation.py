@@ -32,7 +32,7 @@ async def create_reservation(
     """
     if reservation.number_of_seats > await repertoire_service.available_seats(reservation.repertoire_id):
         raise HTTPException(status_code=400, detail="There is no available seats")
-    
+
 
     new_reservation = await reservation_service.add_reservation(reservation)
 
@@ -79,7 +79,7 @@ async def get_reservation_by_id(
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
-@router.get("/repertoireId/{repertoire_id}",response_model=Iterable[Reservation],status_code=200,)
+@router.get("/repertoire_id/{repertoire_id}",response_model=Iterable[Reservation],status_code=200,)
 @inject
 async def get_reservation_by_repertoire_id(
         repertoire_id: int,
