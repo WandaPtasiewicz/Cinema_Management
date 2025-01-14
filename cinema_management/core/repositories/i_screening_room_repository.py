@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Iterable
 
-from cinema_management.core.domains.screening_room import Screening_roomIn
+from cinema_management.core.domains.screeningroom import ScreeningRoomIn
 
 
 class IScreening_roomRepository(ABC):
@@ -29,11 +29,11 @@ class IScreening_roomRepository(ABC):
         """
 
     @abstractmethod
-    async def add_screening_room(self, data: Screening_roomIn) -> Any | None:
+    async def add_screening_room(self, data: ScreeningRoomIn) -> Any | None:
         """The abstract adding new screening_room to the data storage.
 
         Args:
-            data (Screening_roomIn): The details of the new screening_room.
+            data (ScreeningRoomIn): The details of the new screening_room.
 
         Returns:
             Any | None: The newly added screening_room.
@@ -43,13 +43,13 @@ class IScreening_roomRepository(ABC):
     async def update_screening_room(
             self,
             screening_room_id: int,
-            data: Screening_roomIn,
+            data: ScreeningRoomIn,
     ) -> Any | None:
         """The abstract updating screening_room data in the data storage.
 
         Args:
             screening_room_id (int): The id of the screening_room.
-            data (Screening_roomIn): The details of the updated screening_room.
+            data (ScreeningRoomIn): The details of the updated screening_room.
 
         Returns:
             Any | None: The updated screening_room details.

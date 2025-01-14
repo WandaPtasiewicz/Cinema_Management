@@ -5,23 +5,23 @@ from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends, HTTPException
 
 from cinema_management.container import Container
-from cinema_management.core.domains.screening_room import Screening_room, Screening_roomIn
+from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
 from cinema_management.core.services.i_screening_room_service import IScreening_roomService
 
 router = APIRouter()
 
 
-@router.post("/create", response_model=Screening_room, status_code=201)
+@router.post("/create", response_model=ScreeningRoom, status_code=201)
 @inject
 async def create_screening_room(
-        screening_room: Screening_roomIn,
+        screening_room: ScreeningRoomIn,
         service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for adding new screening_room.
 
     Args:
-        screening_room (Screening_roomIn): The screening_room data.
+        screening_room (ScreeningRoomIn): The screening_room data.
         service (IScreening_roomService, optional): The injected service dependency.
 
     Returns:
@@ -34,7 +34,7 @@ async def create_screening_room(
 
     return new_screening_room.model_dump() if new_screening_room else {}
 
-@router.get("/all", response_model=Iterable[Screening_room], status_code=200)
+@router.get("/all", response_model=Iterable[ScreeningRoom], status_code=200)
 @inject
 async def get_all_screening_rooms(
         service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
@@ -55,7 +55,7 @@ async def get_all_screening_rooms(
 
 
 
-@router.get("/{screening_room_id}",response_model=Screening_room,status_code=200,)
+@router.get("/{screening_room_id}", response_model=ScreeningRoom, status_code=200, )
 @inject
 async def get_screening_room_by_id(
         screening_room_id: int,
@@ -78,18 +78,18 @@ async def get_screening_room_by_id(
 
 
 
-@router.put("/{screening_room_id}", response_model=Screening_room, status_code=201)
+@router.put("/{screening_room_id}", response_model=ScreeningRoom, status_code=201)
 @inject
 async def update_screening_room(
         screening_room_id: int,
-        updated_screening_room: Screening_roomIn,
+        updated_screening_room: ScreeningRoomIn,
         service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
 ) -> dict:
     """An endpoint for updating screening_room data.
 
     Args:
         screening_room_id (int): The id of the screening_room.
-        updated_screening_room (Screening_roomIn): The updated screening_room details.
+        updated_screening_room (ScreeningRoomIn): The updated screening_room details.
         service (IScreening_roomService, optional): The injected service dependency.
 
     Raises:

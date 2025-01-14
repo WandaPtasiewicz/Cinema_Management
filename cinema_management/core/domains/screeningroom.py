@@ -6,21 +6,21 @@ from pydantic import BaseModel, ConfigDict
 
 
 
-class Screening_roomIn(BaseModel):
+class ScreeningRoomIn(BaseModel):
     """Model representing movie's DTO attributes."""
     number: int
     rows_count: int
     seats_in_row: int
 
 
-class Screening_room(Screening_roomIn):
+class ScreeningRoom(ScreeningRoomIn):
     """Model representing movie's attributes in the database."""
     id: int
 
     model_config = ConfigDict(from_attributes=True, extra="ignore")
 
     @classmethod
-    def from_record(cls, record: Record) -> "Screening_room":
+    def from_record(cls, record: Record) -> "ScreeningRoom":
         """A method for preparing DTO instance based on DB record.
 
         Args:

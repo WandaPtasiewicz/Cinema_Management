@@ -3,7 +3,7 @@ from datetime import date
 from datetime import time
 
 from cinema_management.core.domains.movie import MovieIn
-from cinema_management.core.domains.screening_room import Screening_roomIn
+from cinema_management.core.domains.screeningroom import ScreeningRoomIn
 from cinema_management.core.domains.reservation import ReservationIn
 from cinema_management.core.domains.repertoire import RepertoireIn
 from cinema_management.core.services.i_reservation_service import IReservationService
@@ -97,19 +97,19 @@ async def main(
         director="Maciej Kornatow"
     )))
 
-    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
+    screening_rooms.append(await screening_room_service.add_screening_room(ScreeningRoomIn(
         number= 1,
         rows_count= 13,
         seats_in_row= 22
     )))
 
-    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
+    screening_rooms.append(await screening_room_service.add_screening_room(ScreeningRoomIn(
         number= 2,
         rows_count= 2,
         seats_in_row= 2
     )))
 
-    screening_rooms.append(await screening_room_service.add_screening_room(Screening_roomIn(
+    screening_rooms.append(await screening_room_service.add_screening_room(ScreeningRoomIn(
         number= 3,
         rows_count= 14,
         seats_in_row= 36

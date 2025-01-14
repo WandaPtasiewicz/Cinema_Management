@@ -6,7 +6,7 @@ from asyncpg import Record  # type: ignore
 from sqlalchemy import select, join
 
 from cinema_management.core.repositories.i_screening_room_repository import IScreening_roomRepository
-from cinema_management.core.domains.screening_room import Screening_room, Screening_roomIn
+from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 from cinema_management.db import (
     screening_rooms_table,
     database,
@@ -28,7 +28,7 @@ class Screening_roomRepository(IScreening_roomRepository):
         )
         screening_rooms = await database.fetch_all(query)
 
-        return [Screening_room.from_record(screening_room) for screening_room in screening_rooms]
+        return [ScreeningRoom.from_record(screening_room) for screening_room in screening_rooms]
 
     async def get_by_id(self, screening_room_id: int) -> Any | None:
         """The method getting screening_room by provided id.
@@ -42,16 +42,16 @@ class Screening_roomRepository(IScreening_roomRepository):
 
         screening_room = await self._get_by_id(screening_room_id)
 
-        return Screening_room.from_record(screening_room) if screening_room else None
+        return ScreeningRoom.from_record(screening_room) if screening_room else None
 
-    async def add_screening_room(self, data: Screening_roomIn) -> Any | None:
+    async def add_screening_room(self, data: ScreeningRoomIn) -> Any | None:
         """The method adding new screening_room to the data storage.
 
         Args:
-            data (Screening_roomIn): The details of the new screening_room.
+            data (ScreeningRoomIn): The details of the new screening_room.
 
         Returns:
-            Screening_room: Full details of the newly added screening_room.
+            ScreeningRoom: Full details of the newly added screening_room.
 
         Returns:
             Any | None: The newly added screening_room.
@@ -61,18 +61,18 @@ class Screening_roomRepository(IScreening_roomRepository):
         new_screening_room_id = await database.execute(query)
         new_screening_room = await self._get_by_id(new_screening_room_id)
 
-        return Screening_room(**dict(new_screening_room)) if new_screening_room else None
+        return ScreeningRoom(**dict(new_screening_room)) if new_screening_room else None
 
     async def update_screening_room(
             self,
             screening_room_id: int,
-            data: Screening_roomIn,
+            data: ScreeningRoomIn,
     ) -> Any | None:
         """The method updating screening_room data in the data storage.
 
         Args:
             screening_room_id (int): The id of the screening_room.
-            data (Screening_roomIn): The details of the updated screening_room.
+            data (ScreeningRoomIn): The details of the updated screening_room.
 
         Returns:
             Any | None: The updated screening_room details.
@@ -88,7 +88,7 @@ class Screening_roomRepository(IScreening_roomRepository):
 
             screening_room = await self._get_by_id(screening_room_id)
 
-            return Screening_room(**dict(screening_room)) if screening_room else None
+            return ScreeningRoom(**dict(screening_room)) if screening_room else None
 
         return None
 
