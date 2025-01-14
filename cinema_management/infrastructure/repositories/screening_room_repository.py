@@ -5,14 +5,14 @@ from typing import Any, Iterable
 from asyncpg import Record  # type: ignore
 from sqlalchemy import select, join
 
-from cinema_management.core.repositories.i_screening_room_repository import IScreening_roomRepository
+from cinema_management.core.repositories.i_screening_room_repository import IScreeningRoomRepository
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
 from cinema_management.db import (
     screening_rooms_table,
     database,
 )
 
-class Screening_roomRepository(IScreening_roomRepository):
+class Screening_roomRepository(IScreeningRoomRepository):
     """A class representing continent DB repository."""
 
     async def get_all_screening_rooms(self) -> Iterable[Any]:

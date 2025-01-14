@@ -92,7 +92,6 @@ async def get_movie_by_id(
     raise HTTPException(status_code=404, detail="Movie not found")
 
 
-
 @router.put("/{movie_id}", response_model=Movie, status_code=201)
 @inject
 async def update_movie(

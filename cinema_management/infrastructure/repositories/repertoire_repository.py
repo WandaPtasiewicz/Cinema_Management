@@ -3,7 +3,7 @@
 from typing import Any, Iterable
 
 from asyncpg import Record  # type: ignore
-from sqlalchemy import select, join
+from sqlalchemy import select
 
 from cinema_management.core.repositories.i_repertoire_repository import IRepertoireRepository
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn

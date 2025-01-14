@@ -1,9 +1,7 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.exception_handlers import http_exception_handler
-
+from fastapi import FastAPI
 
 from cinema_management.api.routers.movie import router as movie_router
 from cinema_management.api.routers.reservation import router as reservation_router
@@ -24,7 +22,6 @@ container.wire(modules=[
     "cinema_management.api.routers.reservation",
     "cinema_management.utils.setup"
 ])
-
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator:

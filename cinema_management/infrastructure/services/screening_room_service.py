@@ -3,7 +3,7 @@
 from typing import Iterable
 
 from cinema_management.core.domains.screeningroom import ScreeningRoom, ScreeningRoomIn
-from cinema_management.core.repositories.i_screening_room_repository import IScreening_roomRepository
+from cinema_management.core.repositories.i_screening_room_repository import IScreeningRoomRepository
 from cinema_management.core.services.i_screening_room_service import IScreening_roomService
 
 
@@ -11,14 +11,14 @@ from cinema_management.core.services.i_screening_room_service import IScreening_
 class Screening_roomService(IScreening_roomService):
     """A class implementing the screening_room service."""
 
-    _screening_room_repository: IScreening_roomRepository
+    _screening_room_repository: IScreeningRoomRepository
 
 
-    def __init__(self, screening_room_repository: IScreening_roomRepository) -> None:
+    def __init__(self, screening_room_repository: IScreeningRoomRepository) -> None:
         """The initializer of the `screening_room service`.
 
         Args:
-            screening_room_repository (IScreening_roomRepository): The reference to the repository.
+            screening_room_repository (IScreeningRoomRepository): The reference to the repository.
         """
         self._screening_room_repository = screening_room_repository
 
