@@ -24,7 +24,9 @@ class RepertoireService(IRepertoireService):
         """The initializer of the `repertoire service`.
 
         Args:
-            repository (IRepertoireRepository): The reference to the repository.
+            repertoire_repository (IRepertoireRepository): The reference to the repository.
+            reservation_service (IReservationService): The reference to the reservation service.
+            screening_room_service (IScreening_roomService): The reference to the screening_room service.
         """
         self._repertoire_repository = repertoire_repository
         self._reservations_service = reservation_service
@@ -81,7 +83,7 @@ class RepertoireService(IRepertoireService):
         """The method getting repertoire by provided screening_room id.
 
         Args:
-            repertoire_id (int): The id of the screening_room.
+            screening_room_id (int): The id of the screening_room.
 
         Returns:
             Repertoire | None: The repertoire details.

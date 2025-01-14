@@ -77,30 +77,6 @@ async def get_screening_room_by_id(
     raise HTTPException(status_code=404, detail="Screening_room not found")
 
 
-@router.get(
-    "/user/{user_id}",
-    response_model=Iterable[Screening_room],
-    status_code=200,
-)
-@inject
-async def get_screening_rooms_by_user(
-        user_id: int,
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
-) -> Iterable:
-    """An endpoint for getting screening_rooms by user who added them.
-
-    Args:
-        user_id (int): The id of the user.
-        service (IScreening_roomService, optional): The injected service dependency.
-
-    Returns:
-        Iterable: The screening_room details collection.
-    """
-
-    screening_rooms = await service.get_by_user(user_id)
-
-    return screening_rooms
-
 
 @router.put("/{screening_room_id}", response_model=Screening_room, status_code=201)
 @inject
@@ -114,7 +90,7 @@ async def update_screening_room(
     Args:
         screening_room_id (int): The id of the screening_room.
         updated_screening_room (Screening_roomIn): The updated screening_room details.
-        service (IScreening_roomtService, optional): The injected service dependency.
+        service (IScreening_roomService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if screening_room does not exist.
@@ -137,23 +113,31 @@ async def update_screening_room(
 @inject
 async def delete_screening_room(
         screening_room_id: int,
-        service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
-
+        screening_room_service: IScreening_roomService = Depends(Provide[Container.screening_room_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 
 ) -> None:
     """An endpoint for deleting screening_rooms.
 
     Args:
         screening_room_id (int): The id of the screening_room.
-        service (IScreening_roomService, optional): The injected service dependency.
+        screening_room_service (IScreening_roomService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if screening_room does not exist.
+        HTTPException: 409 if can not delete movie with existing repertoire.
+
     """
 
-    if await service.get_by_id(screening_room_id=screening_room_id):
+    if await repertoire_service.get_by_screening_room_id(screening_room_id):
+        raise HTTPException(status_code=409, detail="can not delete movie with existing repertoire")
 
-        await service.delete_screening_room(screening_room_id)
+
+
+    if await screening_room_service.get_by_id(screening_room_id=screening_room_id):
+
+        await screening_room_service.delete_screening_room(screening_room_id)
         return
 
     raise HTTPException(status_code=404, detail="Screening_room not found")

@@ -18,7 +18,7 @@ class Screening_roomService(IScreening_roomService):
         """The initializer of the `screening_room service`.
 
         Args:
-            repository (IScreening_roomRepository): The reference to the repository.
+            screening_room_repository (IScreening_roomRepository): The reference to the repository.
         """
         self._screening_room_repository = screening_room_repository
 

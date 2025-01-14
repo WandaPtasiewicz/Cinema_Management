@@ -1,9 +1,9 @@
 """Module containing movie-related domain models"""
 
-from typing import Optional
+
 from asyncpg import Record
 from pydantic import BaseModel, ConfigDict
-from datetime import date
+
 
 
 class Screening_roomIn(BaseModel):

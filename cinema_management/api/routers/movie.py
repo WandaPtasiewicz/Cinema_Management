@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from cinema_management.container import Container
 from cinema_management.core.domains.movie import Movie, MovieIn
 from cinema_management.core.services.i_movie_service import IMovieService
+from cinema_management.core.services.i_repertoire_service import IRepertoireService
 
 router = APIRouter()
 
@@ -91,30 +92,6 @@ async def get_movie_by_id(
     raise HTTPException(status_code=404, detail="Movie not found")
 
 
-@router.get(
-    "/user/{user_id}",
-    response_model=Iterable[Movie],
-    status_code=200,
-)
-@inject
-async def get_movies_by_user(
-        user_id: int,
-        service: IMovieService = Depends(Provide[Container.movie_service]),
-) -> Iterable:
-    """An endpoint for getting movies by user who added them.
-
-    Args:
-        user_id (int): The id of the user.
-        service (IMovieService, optional): The injected service dependency.
-
-    Returns:
-        Iterable: The movie details collection.
-    """
-
-    movies = await service.get_by_user(user_id)
-
-    return movies
-
 
 @router.put("/{movie_id}", response_model=Movie, status_code=201)
 @inject
@@ -128,7 +105,7 @@ async def update_movie(
     Args:
         movie_id (int): The id of the movie.
         updated_movie (MovieIn): The updated movie details.
-        service (IMovietService, optional): The injected service dependency.
+        service (IMovieService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if movie does not exist.
@@ -151,20 +128,29 @@ async def update_movie(
 @inject
 async def delete_movie(
         movie_id: int,
-        service: IMovieService = Depends(Provide[Container.movie_service]),
+        movie_service: IMovieService = Depends(Provide[Container.movie_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 ) -> None:
     """An endpoint for deleting movies.
 
     Args:
         movie_id (int): The id of the movie.
-        service (IcontinentService, optional): The injected service dependency.
+        movie_service (IMovieService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if movie does not exist.
+        HTTPException: 409 if can not delete movie with existing repertoire.
+
+
     """
 
-    if await service.get_by_id(movie_id=movie_id):
-        await service.delete_movie(movie_id)
+    if await repertoire_service.get_by_movie_id(movie_id):
+        raise HTTPException(status_code=409, detail="can not delete movie with existing repertoire")
+
+
+    if await movie_service.get_by_id(movie_id=movie_id):
+        await movie_service.delete_movie(movie_id)
 
         return
 

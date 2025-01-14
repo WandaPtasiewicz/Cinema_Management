@@ -5,7 +5,6 @@ from typing import Iterable, List
 from cinema_management.core.domains.reservation import Reservation, ReservationIn
 from cinema_management.core.repositories.i_reservation_repository import IReservationRepository
 from cinema_management.core.services.i_reservation_service import IReservationService
-from cinema_management.db import reservations_table
 
 
 class ReservationService(IReservationService):
@@ -18,7 +17,7 @@ class ReservationService(IReservationService):
         """The initializer of the `reservation service`.
 
         Args:
-            repository (IReservationRepository): The reference to the repository.
+            reservation_repository (IReservationRepository): The reference to the repository.
         """
         self._reservation_repository = reservation_repository
 
@@ -36,7 +35,8 @@ class ReservationService(IReservationService):
         """The method getting invoice by provided repertoire_id.
 
         Args:
-            repertoire_id (int): The id of the repertoire.
+            reservation_id (int): The id of the repertoire.
+            address (str): The address.
 
         Returns:
             invoice.

@@ -52,11 +52,12 @@ class IReservationService(ABC):
         """
 
     @abstractmethod
-    async def invoice(self,reservation_id: id) -> dict:
+    async def invoice(self,reservation_id: id,address: str) -> dict:
         """The method getting invoice by provided repertoire_id.
 
         Args:
-            repertoire_id (int): The id of the repertoire.
+            reservation_id (int): The id of the repertoire.
+            address (str): The address.
 
         Returns:
             invoice.

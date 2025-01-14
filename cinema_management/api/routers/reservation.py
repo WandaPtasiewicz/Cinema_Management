@@ -25,12 +25,13 @@ async def create_reservation(
     Args:
         reservation (ReservationIn): The reservation data.
         reservation_service (IReservationService, optional): The injected service dependency.
+        repertoire_service (IReservationService, optional): The injected service dependency.
 
     Returns:
         dict: The new reservation attributes.
     """
     if reservation.number_of_seats > await repertoire_service.available_seats(reservation.repertoire_id):
-        raise HTTPException(status_code=400, detail="Brak tylu miejsc")
+        raise HTTPException(status_code=400, detail="There is no available seats")
     
 
     new_reservation = await reservation_service.add_reservation(reservation)
@@ -99,29 +100,6 @@ async def get_reservation_by_repertoire_id(
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
-@router.get("/taken_seats/{repertoire_id}",response_model=dict,status_code=200,)
-@inject
-async def number_of_taken_seats(
-        repertoire_id: int,
-        service: IReservationService = Depends(Provide[Container.reservation_service]),
-) -> dict | None:
-    """An endpoint for getting reservation by id.
-
-    Args:
-        repertoire_id (int): The id of the reservation.
-        service (IReservationService, optional): The injected service dependency.
-
-    Returns:
-        dict | None: The reservation details.
-    """
-
-    if taken_seats := await service.number_of_taken_seats(repertoire_id):
-        return {
-            "taken_seats": taken_seats
-        }
-
-    raise HTTPException(status_code=404, detail="Reservation not found")
-
 @router.get("/invoice/{repertoire_id,address}",response_model=dict,status_code=200,)
 @inject
 async def invoice(
@@ -133,40 +111,17 @@ async def invoice(
 
     Args:
         repertoire_id (int): The id of the reservation.
+        address (str): The address.
         service (IReservationService, optional): The injected service dependency.
 
     Returns:
         dict | None: The reservation details.
     """
-
-    return await service.invoice(repertoire_id,address)
+    if await service.get_by_id(repertoire_id):
+        return await service.invoice(repertoire_id, address)
 
     raise HTTPException(status_code=404, detail="Reservation not found")
 
-
-@router.get(
-    "/user/{user_id}",
-    response_model=Iterable[Reservation],
-    status_code=200,
-)
-@inject
-async def get_reservations_by_user(
-        user_id: int,
-        service: IReservationService = Depends(Provide[Container.reservation_service]),
-) -> Iterable:
-    """An endpoint for getting reservations by user who added them.
-
-    Args:
-        user_id (int): The id of the user.
-        service (IReservationService, optional): The injected service dependency.
-
-    Returns:
-        Iterable: The reservation details collection.
-    """
-
-    reservations = await service.get_by_user(user_id)
-
-    return reservations
 
 
 @router.put("/{reservation_id}", response_model=Reservation, status_code=201)
@@ -181,7 +136,7 @@ async def update_reservation(
     Args:
         reservation_id (int): The id of the reservation.
         updated_reservation (ReservationIn): The updated reservation details.
-        service (IReservationtService, optional): The injected service dependency.
+        service (IReservationService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if reservation does not exist.
@@ -210,7 +165,7 @@ async def delete_reservation(
 
     Args:
         reservation_id (int): The id of the reservation.
-        service (IcontinentService, optional): The injected service dependency.
+        service (IReservationService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if reservation does not exist.

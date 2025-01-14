@@ -1,6 +1,5 @@
 """Module containing repertoire-related domain models"""
 
-from typing import Optional
 from asyncpg import Record
 from pydantic import BaseModel, ConfigDict
 from datetime import date

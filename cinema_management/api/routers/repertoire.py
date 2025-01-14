@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from cinema_management.container import Container
 from cinema_management.core.domains.repertoire import Repertoire, RepertoireIn
 from cinema_management.core.services.i_repertoire_service import IRepertoireService
+from cinema_management.core.services.i_reservation_service import IReservationService
 
 router = APIRouter()
 
@@ -31,6 +32,31 @@ async def create_repertoire(
 
     return new_repertoire.model_dump() if new_repertoire else {}
 
+
+@router.get("/taken_seats/{repertoire_id}",response_model=dict,status_code=200,)
+@inject
+async def number_of_taken_seats(
+        repertoire_id: int,
+        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+) -> dict | None:
+    """An endpoint for getting reservation by id.
+
+    Args:
+        repertoire_id (int): The id of the reservation.
+        service (IReservationService, optional): The injected service dependency.
+
+    Returns:
+        dict | None: The reservation details.
+    """
+
+    if taken_seats := await service.number_of_taken_seats(repertoire_id):
+        return {
+            "taken_seats": taken_seats
+        }
+
+    raise HTTPException(status_code=404, detail="Reservation not found")
+
+
 @router.get("/free_seats/{repertoire_id}", response_model=dict, status_code=200)
 @inject
 async def available_seats(
@@ -40,15 +66,16 @@ async def available_seats(
     """An endpoint for getting all repertoires.
 
     Args:
+        repertoire_id(int): id of the repertoire.
         service (IRepertoireService, optional): The injected service dependency.
 
     Returns:
         Iterable: The repertoire attributes collection.
     """
 
-    if available_seats := await service.available_seats(repertoire_id):
+    if  await service.get_by_id(repertoire_id):
         return {
-            "available_seats": available_seats
+            "available_seats": service.available_seats(repertoire_id)
         }
 
     raise HTTPException(status_code=404, detail="Reservation not found")
@@ -136,29 +163,6 @@ async def get_repertoire_by_screening_room_id(
 
     raise HTTPException(status_code=404, detail="Repertoire not found")
 
-@router.get(
-    "/user/{user_id}",
-    response_model=Iterable[Repertoire],
-    status_code=200,
-)
-@inject
-async def get_repertoires_by_user(
-        user_id: int,
-        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
-) -> Iterable:
-    """An endpoint for getting repertoires by user who added them.
-
-    Args:
-        user_id (int): The id of the user.
-        service (IRepertoireService, optional): The injected service dependency.
-
-    Returns:
-        Iterable: The repertoire details collection.
-    """
-
-    repertoires = await service.get_by_user(user_id)
-
-    return repertoires
 
 
 @router.put("/{repertoire_id}", response_model=Repertoire, status_code=201)
@@ -173,7 +177,7 @@ async def update_repertoire(
     Args:
         repertoire_id (int): The id of the repertoire.
         updated_repertoire (RepertoireIn): The updated repertoire details.
-        service (IRepertoiretService, optional): The injected service dependency.
+        service (IRepertoireService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if repertoire does not exist.
@@ -196,20 +200,25 @@ async def update_repertoire(
 @inject
 async def delete_repertoire(
         repertoire_id: int,
-        service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
+        reservation_service: IReservationService = Depends(Provide[Container.reservation_service]),
+        repertoire_service: IRepertoireService = Depends(Provide[Container.repertoire_service]),
 ) -> None:
     """An endpoint for deleting repertoires.
 
     Args:
         repertoire_id (int): The id of the repertoire.
-        service (IcontinentService, optional): The injected service dependency.
+        reservation_service (IReservationService, optional): The injected service dependency.
+        repertoire_service (IRepertoireService, optional): The injected service dependency.
 
     Raises:
         HTTPException: 404 if repertoire does not exist.
+        HTTPException: 409 if repertoire does not exist.
     """
+    if await reservation_service.get_by_repertoire_id(repertoire_id):
+        raise HTTPException(status_code=409, detail="can not delete repertoire with existing repertoire")
 
-    if await service.get_by_id(repertoire_id=repertoire_id):
-        await service.delete_repertoire(repertoire_id)
+    if await repertoire_service.get_by_id(repertoire_id=repertoire_id):
+        await repertoire_service.delete_repertoire(repertoire_id)
 
         return
 
